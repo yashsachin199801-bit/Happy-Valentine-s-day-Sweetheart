@@ -1,47 +1,42 @@
 /* ================= MCQ WRONG MESSAGES ================= */
 const quizWrongMessages = [
-  "Hmm… close but not quite 😜",
-  "Nope 😅 try remembering again",
-  "Aww 🥺 you know this one",
-  "Think harder 💭 I believe in you",
-  "Hehe 😏 that’s not it",
-  "Memory test failed 😆 retry",
-  "Dil se yaad karo ❤️",
-  "Almost… but not this 😜"
+  "Oops 🙈 thoda aur yaad karo 💭",
+  "Hehe 😜 galat ho gaya",
+  "Aww 🥺 close tha!",
+  "Think again 🤔💖",
+  "Memory test fail 😆",
+  "Dil se yaad karo ❤️✨"
 ];
 
-/* ================= QUIZ FLOW ================= */
-const quizFlow = [
-  { id: "quiz1", next: "quiz2", wrongIndex: 0 },
-  { id: "quiz2", next: "quiz3", wrongIndex: 0 },
-  { id: "quiz3", next: "gameScreen", wrongIndex: 0 }
+const quizSteps = [
+  { id: "quiz1", next: "quiz2", wrong: 0 },
+  { id: "quiz2", next: "quiz3", wrong: 0 },
+  { id: "quiz3", next: "gameScreen", wrong: 0 }
 ];
 
-quizFlow.forEach(step => {
+quizSteps.forEach(step => {
   const screen = document.getElementById(step.id);
   const msg = screen.querySelector(".msg");
-  const options = screen.querySelectorAll(".opt");
 
-  options.forEach(btn => {
+  screen.querySelectorAll(".opt").forEach(btn => {
     btn.addEventListener("click", () => {
       if (btn.classList.contains("correct")) {
-        msg.textContent = ""; // clear message on success
+        msg.textContent = "";
         screen.classList.add("hidden");
         document.getElementById(step.next).classList.remove("hidden");
       } else {
-        msg.textContent = quizWrongMessages[step.wrongIndex];
-        step.wrongIndex = (step.wrongIndex + 1) % quizWrongMessages.length;
+        msg.textContent = quizWrongMessages[step.wrong];
+        step.wrong = (step.wrong + 1) % quizWrongMessages.length;
       }
     });
   });
 });
 
 /* ================= GAME ================= */
-const yesZone = document.getElementById("yesZone");
-const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const noZone = document.getElementById("noZone");
+const yesZone = document.getElementById("yesZone");
 const questionBlock = document.getElementById("questionBlock");
+const gameArea = document.getElementById("gameArea");
 
 const attemptsText = document.getElementById("attempts");
 const destinyMsg = document.getElementById("destinyMsg");
@@ -56,59 +51,54 @@ let yesW = 160;
 let yesH = 64;
 
 const noMessages = [
-  "Hehe 😅 thoda aur socho",
-  "Sach me? 😐",
-  "Dil se jawab do ❤️",
-  "Aise kaise 🥺",
-  "Thak jaogi bhaagte bhaagte 😜",
-  "Bas ek YES hi toh chahiye 😌",
-  "Destiny muskara rahi hai 😉",
-  "Ab toh maan jao 😏",
-  "Kismat likhi ja chuki hai 💫",
-  "There is no more running… destiny chose us ❤️"
+  "Hehe 😅 bhaag gaya!",
+  "Sach me NO? 😐💔",
+  "Dil maanta nahi ❤️🥹",
+  "Aise kaise chalega 😜",
+  "Bas maan jao na 🥺💖",
+  "Dekho destiny 😌✨",
+  "Ab toh YES likha hai 💫",
+  "Bhaagna band karo 😏",
+  "Almost caught you 😈",
+  "No more running… destiny chose us ❤️💍"
 ];
 
-function moveNoButtonSafely() {
-  const noBtnRect = noBtn.getBoundingClientRect();
-  const yesRect = yesZone.getBoundingClientRect();
-  const questionRect = questionBlock.getBoundingClientRect();
-  const containerRect = document.getElementById("gameContent").getBoundingClientRect();
+function moveNoButton() {
+  const area = gameArea.getBoundingClientRect();
+  const btn = noBtn.getBoundingClientRect();
+  const yes = yesZone.getBoundingClientRect();
+  const ques = questionBlock.getBoundingClientRect();
 
-  let safeX, safeY, tries = 0;
+  let x, y, tries = 0;
 
   do {
-    safeX = Math.random() * (containerRect.width - noBtnRect.width);
-    safeY = Math.random() * (containerRect.height - noBtnRect.height);
+    x = Math.random() * (area.width - btn.width);
+    y = Math.random() * (area.height - btn.height);
 
-    const futureRect = {
-      left: containerRect.left + safeX,
-      right: containerRect.left + safeX + noBtnRect.width,
-      top: containerRect.top + safeY,
-      bottom: containerRect.top + safeY + noBtnRect.height
+    const future = {
+      left: area.left + x,
+      right: area.left + x + btn.width,
+      top: area.top + y,
+      bottom: area.top + y + btn.height
     };
 
-    const overlaps = (r) =>
-      !(futureRect.right < r.left ||
-        futureRect.left > r.right ||
-        futureRect.bottom < r.top ||
-        futureRect.top > r.bottom);
+    const overlap = r =>
+      !(future.right < r.left ||
+        future.left > r.right ||
+        future.bottom < r.top ||
+        future.top > r.bottom);
 
-    if (
-      !overlaps(yesRect) &&
-      !overlaps(questionRect)
-    ) break;
-
+    if (!overlap(yes) && !overlap(ques)) break;
     tries++;
-  } while (tries < 50);
+  } while (tries < 60);
 
-  noBtn.style.position = "absolute";
-  noBtn.style.left = `${safeX}px`;
-  noBtn.style.top = `${safeY}px`;
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
 }
 
 noBtn.addEventListener("click", () => {
   attemptsLeft--;
-  attemptsText.textContent = `Attempts left: ${attemptsLeft} / 10`;
+  attemptsText.textContent = `Attempts left: ${attemptsLeft} / 10 😏`;
   destinyMsg.textContent = noMessages[10 - attemptsLeft - 1] || "";
 
   if (attemptsLeft <= 0) {
@@ -116,19 +106,19 @@ noBtn.addEventListener("click", () => {
     return;
   }
 
-  moveNoButtonSafely();
+  moveNoButton();
 
-  if (yesW < window.innerWidth * 0.9) yesW += 24;
-  if (yesH < 160) yesH += 12;
+  if (yesW < window.innerWidth * 0.9) yesW += 28;
+  if (yesH < 180) yesH += 14;
   yesZone.style.width = `${yesW}px`;
   yesZone.style.height = `${yesH}px`;
 });
 
-yesBtn.addEventListener("click", () => {
-  if (audio.paused) audio.play().catch(()=>{});
+document.getElementById("yesBtn").addEventListener("click", () => {
+  if (audio.paused) audio.play().catch(() => {});
 
   setTimeout(() => {
-    confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
   }, 300);
 
   gameScreen.classList.add("hidden");
