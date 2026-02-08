@@ -1,11 +1,20 @@
+const yesZone = document.getElementById("yesZone");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const yesZone = document.getElementById("yesZone");
 const noZone = document.getElementById("noZone");
 const attemptsText = document.getElementById("attempts");
-const title = document.getElementById("title");
-const card = document.getElementById("card");
+const gameScreen = document.getElementById("gameScreen");
+const finalScreen = document.getElementById("finalScreen");
 const music = document.getElementById("music");
+
+const slideImage = document.getElementById("slideImage");
+
+const images = [
+  "megha1.jpg",
+  "megha2.jpg",
+  "megha3.jpg",
+  "megha4.jpg"
+];
 
 const noTexts = [
   "Think again Megha 🤨",
@@ -20,81 +29,73 @@ const noTexts = [
   "Bas Megha 😌"
 ];
 
-let clicks = 0;
-let scale = 1;
+let noClicks = 0;
+let slideIndex = 0;
+let slideshowStarted = false;
 
-const images = [
-  "megha1.jpg",
-  "megha2.jpg",
-  "megha3.jpg",
-  "megha4.jpg"
-];
+/* -------- NO BUTTON LOGIC -------- */
 
 noBtn.addEventListener("click", () => {
-  if (clicks >= 10) return;
+  if (noClicks >= 10) return;
 
-  clicks++;
-  attemptsText.innerText = `Attempts left: ${10 - clicks} / 10`;
-  noBtn.innerText = noTexts[clicks - 1];
+  noBtn.innerText = noTexts[noClicks];
+  noClicks++;
+  attemptsText.innerText = `Attempts left: ${10 - noClicks} / 10`;
 
-  /* YES GROWTH */
-  scale = Math.min(scale * 1.25, 3.5);
-  yesBtn.style.transform = `scale(${scale})`;
+  // Expand YES ZONE safely
+  const newHeight = Math.min(300, yesZone.offsetHeight + 30);
+  const newWidth = Math.min(window.innerWidth * 0.9, yesZone.offsetWidth + 30);
 
-  /* NO BUTTON SAFE MOVE */
+  yesZone.style.height = newHeight + "px";
+  yesZone.style.width = newWidth + "px";
+
+  // Move NO safely inside its zone
   const zoneW = noZone.clientWidth;
   const zoneH = noZone.clientHeight;
   const btnW = noBtn.offsetWidth;
   const btnH = noBtn.offsetHeight;
-  const margin = 12;
+  const margin = 10;
 
   const maxX = zoneW - btnW - margin;
   const maxY = zoneH - btnH - margin;
 
-  const x = Math.random() * maxX;
-  const y = Math.random() * maxY;
+  const x = Math.max(margin, Math.random() * maxX);
+  const y = Math.max(margin, Math.random() * maxY);
 
-  noBtn.style.left = `${Math.max(margin, x)}px`;
-  noBtn.style.top = `${Math.max(margin, y)}px`;
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
 
-  if (clicks === 10) {
+  if (noClicks === 10) {
     noBtn.style.display = "none";
-    title.innerText = "😌 Enough Megha… Destiny has decided 💘";
-    attemptsText.innerText = "";
   }
 });
 
-yesBtn.addEventListener("click", () => {
-  music.play().catch(() => {});
+/* -------- YES BUTTON -------- */
 
+yesBtn.addEventListener("click", () => {
+  gameScreen.classList.add("hidden");
+  finalScreen.classList.remove("hidden");
+
+  // Music plays ONCE
+  if (music.paused) {
+    music.play().catch(() => {});
+  }
+
+  // Confetti (mobile safe)
   setTimeout(() => {
     confetti({
-      particleCount: 180,
-      spread: 90,
+      particleCount: 150,
+      spread: 80,
       origin: { y: 0.6 }
     });
   }, 300);
 
-  card.innerHTML = `
-    <div class="final">
-      <h1>💖 YAY! SHE SAID YES 💖</h1>
-
-      <p>
-        Meri pyaari Megha ❤️<br><br>
-        Tum meri life ka wo hissa ho jahan har din thoda zyada sukoon milta hai.<br><br>
-        Tumhari smile meri strength hai, tumhara saath meri sabse badi blessing 💖<br><br>
-        Har Valentine, har din, main tumhe thoda aur pyaar karunga 💍<br><br>
-        Forever yours,<br>
-        Your Valentine 💘
-      </p>
-
-      <img id="slideImage" src="${images[0]}" />
-    </div>
-  `;
-
-  let index = 0;
-  setInterval(() => {
-    index = (index + 1) % images.length;
-    document.getElementById("slideImage").src = images[index];
-  }, 2500);
+  // Slideshow
+  if (!slideshowStarted) {
+    slideshowStarted = true;
+    setInterval(() => {
+      slideIndex = (slideIndex + 1) % images.length;
+      slideImage.src = images[slideIndex];
+    }, 2500);
+  }
 });
