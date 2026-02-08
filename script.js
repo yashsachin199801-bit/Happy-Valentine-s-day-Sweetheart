@@ -3,18 +3,16 @@ const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const noZone = document.getElementById("noZone");
 const attemptsText = document.getElementById("attempts");
+
 const gameScreen = document.getElementById("gameScreen");
 const finalScreen = document.getElementById("finalScreen");
-const music = document.getElementById("music");
 
-const slideImage = document.getElementById("slideImage");
+const audio = document.getElementById("loveAudio");
+const slideshowImg = document.getElementById("slideshow");
 
-const images = [
-  "megha1.jpg",
-  "megha2.jpg",
-  "megha3.jpg",
-  "megha4.jpg"
-];
+let attemptsLeft = 10;
+let yesWidth = 140;
+let yesHeight = 60;
 
 const noTexts = [
   "Think again Megha 🤨",
@@ -29,73 +27,75 @@ const noTexts = [
   "Bas Megha 😌"
 ];
 
-let noClicks = 0;
 let slideIndex = 0;
-let slideshowStarted = false;
+let slideshowInterval = null;
 
-/* -------- NO BUTTON LOGIC -------- */
-
+/* NO BUTTON LOGIC */
 noBtn.addEventListener("click", () => {
-  if (noClicks >= 10) return;
+  attemptsLeft--;
+  attemptsText.textContent = `Attempts left: ${attemptsLeft} / 10`;
 
-  noBtn.innerText = noTexts[noClicks];
-  noClicks++;
-  attemptsText.innerText = `Attempts left: ${10 - noClicks} / 10`;
-
-  // Expand YES ZONE safely
-  const newHeight = Math.min(300, yesZone.offsetHeight + 30);
-  const newWidth = Math.min(window.innerWidth * 0.9, yesZone.offsetWidth + 30);
-
-  yesZone.style.height = newHeight + "px";
-  yesZone.style.width = newWidth + "px";
-
-  // Move NO safely inside its zone
-  const zoneW = noZone.clientWidth;
-  const zoneH = noZone.clientHeight;
-  const btnW = noBtn.offsetWidth;
-  const btnH = noBtn.offsetHeight;
-  const margin = 10;
-
-  const maxX = zoneW - btnW - margin;
-  const maxY = zoneH - btnH - margin;
-
-  const x = Math.max(margin, Math.random() * maxX);
-  const y = Math.max(margin, Math.random() * maxY);
-
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
-
-  if (noClicks === 10) {
-    noBtn.style.display = "none";
+  const index = 10 - attemptsLeft - 1;
+  if (noTexts[index]) {
+    noBtn.textContent = noTexts[index];
   }
+
+  if (attemptsLeft <= 0) {
+    noBtn.style.display = "none";
+    return;
+  }
+
+  const zoneRect = noZone.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+
+  const maxX = zoneRect.width - btnRect.width;
+  const maxY = zoneRect.height - btnRect.height;
+
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
+
+  // Grow YES safely
+  const maxWidth = window.innerWidth * 0.9;
+  if (yesWidth < maxWidth) yesWidth += 20;
+  if (yesHeight < 140) yesHeight += 10;
+
+  yesZone.style.width = `${yesWidth}px`;
+  yesZone.style.height = `${yesHeight}px`;
 });
 
-/* -------- YES BUTTON -------- */
-
+/* YES BUTTON LOGIC */
 yesBtn.addEventListener("click", () => {
-  gameScreen.classList.add("hidden");
-  finalScreen.classList.remove("hidden");
-
-  // Music plays ONCE
-  if (music.paused) {
-    music.play().catch(() => {});
+  // Audio: user-initiated, plays once
+  if (audio.paused) {
+    audio.play().catch(() => {});
   }
 
-  // Confetti (mobile safe)
+  // Confetti with delay (mobile-safe)
   setTimeout(() => {
     confetti({
-      particleCount: 150,
-      spread: 80,
+      particleCount: 120,
+      spread: 70,
       origin: { y: 0.6 }
     });
   }, 300);
 
-  // Slideshow
-  if (!slideshowStarted) {
-    slideshowStarted = true;
-    setInterval(() => {
-      slideIndex = (slideIndex + 1) % images.length;
-      slideImage.src = images[slideIndex];
-    }, 2500);
-  }
+  // Screen transition
+  gameScreen.classList.add("hidden");
+  finalScreen.classList.remove("hidden");
+
+  startSlideshow();
 });
+
+/* SLIDESHOW */
+function startSlideshow() {
+  if (slideshowInterval) return;
+
+  slideshowInterval = setInterval(() => {
+    slideIndex = (slideIndex + 1) % 4;
+    slideshowImg.src = `megha${slideIndex + 1}.jpg`;
+  }, 2500);
+}
