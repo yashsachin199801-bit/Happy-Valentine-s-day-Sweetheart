@@ -6,30 +6,27 @@
   <title>Megha ❤️ Valentine</title>
 
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-  <!-- Audio (plays ONLY on YES click) -->
   <audio id="music" src="khairiyat.mp3" loop></audio>
 
-  <div id="card">
+  <div class="app" id="app">
+
     <div class="header">
       <h1 id="title">💘 Megha, will you be my Valentine?</h1>
       <p id="attempts">Attempts left: 10 / 10</p>
     </div>
 
-    <!-- YES AREA -->
-    <div id="yesZone">
+    <div class="yes-area">
       <button id="yesBtn">Yes ❤️</button>
     </div>
 
-    <!-- NO AREA -->
-    <div id="noZone">
+    <div class="no-area" id="noArea">
       <button id="noBtn">No 😐</button>
     </div>
+
   </div>
 
   <script src="script.js"></script>
