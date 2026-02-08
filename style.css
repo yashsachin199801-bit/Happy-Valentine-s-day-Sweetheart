@@ -26,15 +26,13 @@ body {
   width: 100%;
   max-width: 900px;
   text-align: center;
-  position: relative; /* 🔑 critical */
 }
 
-h1 {
+.question-block h1 {
   margin-bottom: 10px;
 }
 
 .question {
-  font-size: 1.2rem;
   margin-bottom: 20px;
 }
 
@@ -52,45 +50,24 @@ h1 {
 }
 
 .msg {
-  margin-top: 18px;
+  margin-top: 16px;
   font-weight: 600;
   color: #c2185b;
-  min-height: 1.5em;
+  min-height: 1.4em;
 }
 
-/* GAME */
-#gameArea {
-  position: relative; /* 🔑 anchor for NO button */
-  min-height: 420px;
-}
-
-.buttons-row {
+/* YES AREA */
+.yes-area {
   display: flex;
-  gap: 24px;
   justify-content: center;
-  margin-top: 24px;
+  margin: 20px 0;
 }
 
 #yesZone {
   background: #4caf50;
-  border-radius: 18px;
-  width: 160px;
-  height: 64px;
-  display: flex;
-  transition: width 0.25s, height 0.25s;
-  z-index: 3; /* YES always on top */
-}
-
-#noBtn {
-  position: absolute;
-  width: 160px;
-  height: 64px;
-  background: #f44336;
-  border-radius: 18px;
-  border: none;
-  color: white;
-  font-size: 1.1rem;
-  z-index: 2;
+  width: 180px;
+  height: 70px;
+  border-radius: 20px;
 }
 
 #yesBtn {
@@ -99,10 +76,27 @@ h1 {
   background: transparent;
   border: none;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 700;
 }
 
+/* NO AREA */
+.no-area {
+  position: relative;
+  height: 180px;
+  margin-top: 10px;
+}
+
+#noBtn {
+  position: absolute;
+  width: 180px;
+  height: 70px;
+  background: #f44336;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+}
 
 /* FINAL */
 #slideshow {
