@@ -1,8 +1,10 @@
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
+const yesZone = document.getElementById("yesZone");
 const noZone = document.getElementById("noZone");
 const attemptsText = document.getElementById("attempts");
 const title = document.getElementById("title");
+const card = document.getElementById("card");
 const music = document.getElementById("music");
 
 const noTexts = [
@@ -18,56 +20,81 @@ const noTexts = [
   "Bas Megha 😌"
 ];
 
-let noClicks = 0;
+let clicks = 0;
+let scale = 1;
 
-/* NO BUTTON */
+const images = [
+  "megha1.jpg",
+  "megha2.jpg",
+  "megha3.jpg",
+  "megha4.jpg"
+];
+
 noBtn.addEventListener("click", () => {
-  if (noClicks >= 10) return;
+  if (clicks >= 10) return;
 
-  noBtn.innerText = noTexts[noClicks];
-  noClicks++;
-  attemptsText.innerText = `Attempts left: ${10 - noClicks} / 10`;
+  clicks++;
+  attemptsText.innerText = `Attempts left: ${10 - clicks} / 10`;
+  noBtn.innerText = noTexts[clicks - 1];
 
-  // Move NO safely inside its own zone
+  /* YES GROWTH */
+  scale = Math.min(scale * 1.25, 3.5);
+  yesBtn.style.transform = `scale(${scale})`;
+
+  /* NO BUTTON SAFE MOVE */
   const zoneW = noZone.clientWidth;
   const zoneH = noZone.clientHeight;
   const btnW = noBtn.offsetWidth;
   const btnH = noBtn.offsetHeight;
+  const margin = 12;
 
-  const x = Math.random() * (zoneW - btnW);
-  const y = Math.random() * (zoneH - btnH);
+  const maxX = zoneW - btnW - margin;
+  const maxY = zoneH - btnH - margin;
 
-  noBtn.style.left = `${x}px`;
-  noBtn.style.top = `${y}px`;
-  noBtn.style.transform = "none";
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
 
-  // Grow YES button (REAL size, not transform)
-  yesBtn.style.width = `${220 + noClicks * 18}px`;
-  yesBtn.style.height = `${110 + noClicks * 22}px`;
+  noBtn.style.left = `${Math.max(margin, x)}px`;
+  noBtn.style.top = `${Math.max(margin, y)}px`;
 
-  if (noClicks === 10) {
+  if (clicks === 10) {
     noBtn.style.display = "none";
     title.innerText = "😌 Enough Megha… Destiny has decided 💘";
-    attemptsText.innerText = "No more escapes 😌";
+    attemptsText.innerText = "";
   }
 });
 
-
-
-
-/* YES BUTTON */
 yesBtn.addEventListener("click", () => {
   music.play().catch(() => {});
 
-  document.getElementById("card").innerHTML = `
-    <div style="text-align:center;padding:40px;color:white">
+  setTimeout(() => {
+    confetti({
+      particleCount: 180,
+      spread: 90,
+      origin: { y: 0.6 }
+    });
+  }, 300);
+
+  card.innerHTML = `
+    <div class="final">
       <h1>💖 YAY! SHE SAID YES 💖</h1>
-      <p style="margin-top:20px;font-size:18px">
+
+      <p>
         Meri pyaari Megha ❤️<br><br>
-        Har Valentine, har din,<br>
-        main tumhe thoda aur pyaar karunga 💍
+        Tum meri life ka wo hissa ho jahan har din thoda zyada sukoon milta hai.<br><br>
+        Tumhari smile meri strength hai, tumhara saath meri sabse badi blessing 💖<br><br>
+        Har Valentine, har din, main tumhe thoda aur pyaar karunga 💍<br><br>
+        Forever yours,<br>
+        Your Valentine 💘
       </p>
-      <img src="megha1.jpg" style="margin-top:20px;width:220px;border-radius:16px">
+
+      <img id="slideImage" src="${images[0]}" />
     </div>
   `;
+
+  let index = 0;
+  setInterval(() => {
+    index = (index + 1) % images.length;
+    document.getElementById("slideImage").src = images[index];
+  }, 2500);
 });
