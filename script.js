@@ -52,6 +52,9 @@ noBtn.addEventListener("click", () => {
   }
 });
 
+
+
+
 /* YES BUTTON */
 yesBtn.addEventListener("click", () => {
   music.play().catch(() => {});
