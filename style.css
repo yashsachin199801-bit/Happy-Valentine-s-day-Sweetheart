@@ -9,7 +9,6 @@ body {
   background: linear-gradient(180deg, #ff8fb3, #ffb3cc);
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .app {
@@ -36,32 +35,31 @@ body {
   opacity: 0.9;
 }
 
-/* YES AREA */
+/* YES AREA — REAL SIZE GROWTH */
 .yes-area {
-  height: 160px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 20px;
+  margin: 20px 0;
 }
 
 #yesBtn {
   background: #2ecc71;
   color: white;
   border: none;
-  border-radius: 50px;
-  font-size: 20px;
-  padding: 16px 42px;
+  border-radius: 48px;
+  font-size: 22px;
+  width: 200px;
+  height: 70px;
   cursor: pointer;
-  transform-origin: top center;
-  transition: transform 0.25s ease;
+  transition: width 0.25s ease, height 0.25s ease;
 }
 
-/* NO AREA (PLAYGROUND) */
+/* NO AREA — SEPARATE PLAYGROUND */
 .no-area {
-  flex: 1;
   position: relative;
-  border-radius: 16px;
+  flex: 1;
+  border-radius: 18px;
   margin-top: 10px;
 }
 
