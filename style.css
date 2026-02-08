@@ -32,10 +32,6 @@ body {
   margin-bottom: 10px;
 }
 
-.question {
-  margin-bottom: 20px;
-}
-
 .options {
   display: grid;
   gap: 12px;
@@ -46,7 +42,6 @@ body {
   border-radius: 14px;
   border: none;
   background: #ffd1dc;
-  font-size: 1rem;
 }
 
 .msg {
@@ -56,11 +51,13 @@ body {
   min-height: 1.4em;
 }
 
-/* YES AREA */
-.yes-area {
+/* BUTTON ALIGNMENT */
+.button-wrapper {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
+  gap: 32px;
+  margin-top: 24px;
+  position: relative;
 }
 
 #yesZone {
@@ -80,11 +77,10 @@ body {
   font-weight: 700;
 }
 
-/* NO AREA */
-.no-area {
+.no-wrapper {
   position: relative;
-  height: 180px;
-  margin-top: 10px;
+  width: 180px;
+  height: 140px; /* playground below */
 }
 
 #noBtn {
@@ -96,6 +92,8 @@ body {
   border: none;
   color: white;
   font-size: 1.2rem;
+  top: 0;
+  left: 0;
 }
 
 /* FINAL */
