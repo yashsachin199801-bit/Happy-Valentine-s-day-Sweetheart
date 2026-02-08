@@ -19,12 +19,13 @@ const noTexts = [
 ];
 
 let clicks = 0;
-let scaleX = 1;
-let scaleY = 1;
+let yesWidth = 200;
+let yesHeight = 70;
 
-const GROW_X = 1.18;
-const GROW_Y = 1.25;
-const MAX_X = 3;
+const WIDTH_GROW = 1.25;
+const HEIGHT_GROW = 1.35;
+const MAX_WIDTH = window.innerWidth * 0.9;
+const MAX_HEIGHT = window.innerHeight * 0.55;
 
 /* NO CLICK */
 noBtn.addEventListener("click", () => {
@@ -34,12 +35,14 @@ noBtn.addEventListener("click", () => {
   attemptsText.textContent = `Attempts left: ${10 - clicks} / 10`;
   noBtn.textContent = noTexts[clicks - 1];
 
-  /* Grow YES calmly */
-  scaleX = Math.min(scaleX * GROW_X, MAX_X);
-  scaleY = scaleY * GROW_Y;
-  yesBtn.style.transform = `scale(${scaleX}, ${scaleY})`;
+  /* GROW YES (REAL SIZE) */
+  yesWidth = Math.min(yesWidth * WIDTH_GROW, MAX_WIDTH);
+  yesHeight = Math.min(yesHeight * HEIGHT_GROW, MAX_HEIGHT);
 
-  /* Move NO safely inside playground */
+  yesBtn.style.width = `${yesWidth}px`;
+  yesBtn.style.height = `${yesHeight}px`;
+
+  /* MOVE NO SAFELY */
   const area = noArea.getBoundingClientRect();
   const btn = noBtn.getBoundingClientRect();
   const margin = 12;
@@ -67,14 +70,15 @@ yesBtn.addEventListener("click", () => {
   music.play().catch(() => {});
 
   confetti({
-    particleCount: 180,
-    spread: 100,
+    particleCount: 200,
+    spread: 110,
     origin: { y: 0.6 }
   });
 
   document.getElementById("app").innerHTML = `
     <div style="text-align:center;color:white;padding:40px 20px">
       <h1>Meri pyaari Megha ❤️</h1>
+
       <p style="font-size:16px;line-height:1.7">
         Tum meri life ka wo hissa ho jahan har din
         thoda zyada sukoon milta hai.<br><br>
