@@ -41,6 +41,8 @@ const yesZone = document.getElementById("yesZone");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const noZone = document.getElementById("noZone");
+const questionBlock = document.getElementById("questionBlock");
+
 const attemptsText = document.getElementById("attempts");
 const destinyMsg = document.getElementById("destinyMsg");
 const audio = document.getElementById("loveAudio");
@@ -66,6 +68,44 @@ const noMessages = [
   "There is no more running… destiny chose us ❤️"
 ];
 
+function moveNoButtonSafely() {
+  const noBtnRect = noBtn.getBoundingClientRect();
+  const yesRect = yesZone.getBoundingClientRect();
+  const questionRect = questionBlock.getBoundingClientRect();
+  const containerRect = document.getElementById("gameContent").getBoundingClientRect();
+
+  let safeX, safeY, tries = 0;
+
+  do {
+    safeX = Math.random() * (containerRect.width - noBtnRect.width);
+    safeY = Math.random() * (containerRect.height - noBtnRect.height);
+
+    const futureRect = {
+      left: containerRect.left + safeX,
+      right: containerRect.left + safeX + noBtnRect.width,
+      top: containerRect.top + safeY,
+      bottom: containerRect.top + safeY + noBtnRect.height
+    };
+
+    const overlaps = (r) =>
+      !(futureRect.right < r.left ||
+        futureRect.left > r.right ||
+        futureRect.bottom < r.top ||
+        futureRect.top > r.bottom);
+
+    if (
+      !overlaps(yesRect) &&
+      !overlaps(questionRect)
+    ) break;
+
+    tries++;
+  } while (tries < 50);
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = `${safeX}px`;
+  noBtn.style.top = `${safeY}px`;
+}
+
 noBtn.addEventListener("click", () => {
   attemptsLeft--;
   attemptsText.textContent = `Attempts left: ${attemptsLeft} / 10`;
@@ -76,12 +116,7 @@ noBtn.addEventListener("click", () => {
     return;
   }
 
-  const zone = noZone.getBoundingClientRect();
-  const btn = noBtn.getBoundingClientRect();
-
-  noBtn.style.position = "absolute";
-  noBtn.style.left = `${Math.random() * (zone.width - btn.width)}px`;
-  noBtn.style.top = `${Math.random() * (zone.height - btn.height)}px`;
+  moveNoButtonSafely();
 
   if (yesW < window.innerWidth * 0.9) yesW += 24;
   if (yesH < 160) yesH += 12;
