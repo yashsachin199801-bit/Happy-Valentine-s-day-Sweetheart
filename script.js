@@ -1,4 +1,5 @@
-/* ================= MCQ WRONG MESSAGES ================= */
+/* ===================== MCQ SECTION ===================== */
+
 const quizWrongMessages = [
   "Oops 🙈 thoda aur yaad karo 💭",
   "Hehe 😜 galat ho gaya",
@@ -23,7 +24,13 @@ quizSteps.forEach(step => {
       if (btn.classList.contains("correct")) {
         msg.textContent = "";
         screen.classList.add("hidden");
-        document.getElementById(step.next).classList.remove("hidden");
+
+        const nextScreen = document.getElementById(step.next);
+        nextScreen.classList.remove("hidden");
+
+        if (step.next === "gameScreen") {
+          placeNoButtonInitially();
+        }
       } else {
         msg.textContent = quizWrongMessages[step.wrong];
         step.wrong = (step.wrong + 1) % quizWrongMessages.length;
@@ -32,9 +39,11 @@ quizSteps.forEach(step => {
   });
 });
 
-/* ================= GAME ================= */
+/* ===================== GAME SECTION ===================== */
+
 const noBtn = document.getElementById("noBtn");
 const yesZone = document.getElementById("yesZone");
+const yesBtn = document.getElementById("yesBtn");
 const questionBlock = document.getElementById("questionBlock");
 const gameArea = document.getElementById("gameArea");
 
@@ -63,7 +72,40 @@ const noMessages = [
   "No more running… destiny chose us ❤️💍"
 ];
 
-function moveNoButton() {
+/* ===================== GEOMETRY HELPERS ===================== */
+
+function getOverlapRatio(rectA, rectB) {
+  const xOverlap = Math.max(
+    0,
+    Math.min(rectA.right, rectB.right) - Math.max(rectA.left, rectB.left)
+  );
+  const yOverlap = Math.max(
+    0,
+    Math.min(rectA.bottom, rectB.bottom) - Math.max(rectA.top, rectB.top)
+  );
+
+  const overlapArea = xOverlap * yOverlap;
+  const areaB = rectB.width * rectB.height;
+
+  return areaB === 0 ? 0 : overlapArea / areaB;
+}
+
+function overlaps(rectA, rectB) {
+  return !(
+    rectA.right < rectB.left ||
+    rectA.left > rectB.right ||
+    rectA.bottom < rectB.top ||
+    rectA.top > rectB.bottom
+  );
+}
+
+/* ===================== NO BUTTON PLACEMENT ===================== */
+
+function placeNoButtonInitially() {
+  moveNoButtonSafely(true);
+}
+
+function moveNoButtonSafely(isInitial = false) {
   const area = gameArea.getBoundingClientRect();
   const btn = noBtn.getBoundingClientRect();
   const yes = yesZone.getBoundingClientRect();
@@ -72,29 +114,42 @@ function moveNoButton() {
   let x, y, tries = 0;
 
   do {
-    x = Math.random() * (area.width - btn.width);
-    y = Math.random() * (area.height - btn.height);
+    if (isInitial) {
+      // Start BELOW YES, centered
+      x = (area.width - btn.width) / 2;
+      y = yes.bottom - area.top + 20;
+    } else {
+      x = Math.random() * (area.width - btn.width);
+      y = Math.random() * (area.height - btn.height);
+    }
 
     const future = {
       left: area.left + x,
       right: area.left + x + btn.width,
       top: area.top + y,
-      bottom: area.top + y + btn.height
+      bottom: area.top + y + btn.height,
+      width: btn.width,
+      height: btn.height
     };
 
-    const overlap = r =>
-      !(future.right < r.left ||
-        future.left > r.right ||
-        future.bottom < r.top ||
-        future.top > r.bottom);
+    const overlapWithQuestion = overlaps(future, ques);
+    const overlapRatioWithYes = getOverlapRatio(future, yes);
 
-    if (!overlap(yes) && !overlap(ques)) break;
+    // Reject if:
+    // 1. overlaps question text
+    // 2. overlaps YES more than 40%
+    if (!overlapWithQuestion && overlapRatioWithYes <= 0.4) {
+      break;
+    }
+
     tries++;
-  } while (tries < 60);
+  } while (tries < 120);
 
   noBtn.style.left = `${x}px`;
   noBtn.style.top = `${y}px`;
 }
+
+/* ===================== NO BUTTON CLICK ===================== */
 
 noBtn.addEventListener("click", () => {
   attemptsLeft--;
@@ -103,22 +158,33 @@ noBtn.addEventListener("click", () => {
 
   if (attemptsLeft <= 0) {
     noBtn.style.display = "none";
+    destinyMsg.textContent =
+      "There is no more running… destiny has already chosen us ❤️💍✨";
     return;
   }
 
-  moveNoButton();
+  moveNoButtonSafely(false);
 
+  // Grow YES safely (no scale)
   if (yesW < window.innerWidth * 0.9) yesW += 28;
   if (yesH < 180) yesH += 14;
   yesZone.style.width = `${yesW}px`;
   yesZone.style.height = `${yesH}px`;
 });
 
-document.getElementById("yesBtn").addEventListener("click", () => {
-  if (audio.paused) audio.play().catch(() => {});
+/* ===================== YES BUTTON ===================== */
+
+yesBtn.addEventListener("click", () => {
+  if (audio.paused) {
+    audio.play().catch(() => {});
+  }
 
   setTimeout(() => {
-    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+    confetti({
+      particleCount: 120,
+      spread: 80,
+      origin: { y: 0.6 }
+    });
   }, 300);
 
   gameScreen.classList.add("hidden");
