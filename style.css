@@ -50,9 +50,11 @@ h1 {
   font-size: 1rem;
 }
 
-.msg, #destinyMsg {
-  margin-top: 16px;
+.msg {
+  margin-top: 18px;
   font-weight: 600;
+  color: #c2185b; /* 🔴 force visibility */
+  min-height: 1.5em; /* prevents layout jump */
 }
 
 /* GAME */
@@ -110,4 +112,3 @@ h1 {
   text-align: left;
   line-height: 1.7;
 }
-
