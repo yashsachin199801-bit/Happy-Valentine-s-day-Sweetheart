@@ -6,70 +6,89 @@
   <title>Valentine 💘</title>
 
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-  <!-- Audio MUST be top-level and never destroyed -->
-  <audio id="loveAudio" src="khairiyat.mp3" preload="auto"></audio>
+<!-- AUDIO (TOP LEVEL, NEVER DESTROYED) -->
+<audio id="loveAudio" src="khairiyat.mp3" preload="auto"></audio>
 
-  <!-- GAME SCREEN -->
-  <div id="gameScreen" class="screen">
-    <div class="card">
-      <h1>💘 Megha, will you be my Valentine?</h1>
-      <p id="attempts">Attempts left: 10 / 10</p>
+<!-- QUIZ SCREEN 1 -->
+<div class="screen" id="quiz1">
+  <div class="card">
+    <h1>Question 1 💭</h1>
+    <p class="question">When did we meet for the 1st time ?</p>
+    <div class="options">
+      <button class="opt">2 july 2024</button>
+      <button class="opt">07 july 2024</button>
+      <button class="opt correct">21 july 2024</button>
+      <button class="opt">24 july 2024</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+</div>
 
-      <div class="buttons-row">
+<!-- QUIZ SCREEN 2 -->
+<div class="screen hidden" id="quiz2">
+  <div class="card">
+    <h1>Question 2 😅</h1>
+    <p class="question">What makes me smile ?</p>
+    <div class="options">
+      <button class="opt">Technologia</button>
+      <button class="opt">Money</button>
+      <button class="opt correct">Your Smile</button>
+      <button class="opt">Your anger</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+</div>
 
-        <!-- YES ZONE -->
-        <div id="yesZone">
-          <button id="yesBtn">YES 💖</button>
-        </div>
+<!-- QUIZ SCREEN 3 -->
+<div class="screen hidden" id="quiz3">
+  <div class="card">
+    <h1>Final Question 💖</h1>
+    <p class="question">Who loves whom more?</p>
+    <div class="options">
+      <button class="opt">You love me more ❤️</button>
+      <button class="opt">Equal</button>
+      <button class="opt">Bhagwan Jane 🙌</button>
+      <button class="opt correct">I love you more 😌</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+</div>
 
-        <!-- NO ZONE -->
-        <div id="noZone">
-          <button id="noBtn">NO 🙈</button>
-        </div>
+<!-- VALENTINE GAME SCREEN -->
+<div class="screen hidden" id="gameScreen">
+  <div class="card">
+    <h1>💘 Megha, will you be my Valentine?</h1>
+    <p id="attempts">Attempts left: 10 / 10</p>
 
+    <div class="buttons-row">
+      <div id="yesZone">
+        <button id="yesBtn">YES 💖</button>
+      </div>
+      <div id="noZone">
+        <button id="noBtn">NO 🙈</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- FINAL SCREEN -->
-  <div id="finalScreen" class="screen hidden">
-    <div class="card final-card">
-
-      <img id="slideshow" src="megha1.jpg" alt="Megha" />
-
-      <div class="letter">
-        <p>Meri pyaari Megha ❤️</p>
-
-        <p>
-          Tum meri life ka wo hissa ho jahan har din<br />
-          thoda zyada sukoon milta hai.
-        </p>
-
-        <p>
-          Tumhari smile meri strength hai,<br />
-          tumhara saath meri sabse badi blessing 💖
-        </p>
-
-        <p>
-          Har Valentine, har din,<br />
-          main tumhe thoda aur pyaar karunga 💍
-        </p>
-
-        <p>
-          Forever yours,<br />
-          Your Valentine 💘
-        </p>
-      </div>
-
+<!-- FINAL SCREEN -->
+<div class="screen hidden" id="finalScreen">
+  <div class="card final-card">
+    <img id="slideshow" src="megha1.jpg" alt="Megha" />
+    <div class="letter">
+      <p>Meri pyaari Megha ❤️</p>
+      <p>Tum meri life ka wo hissa ho jahan har din<br>thoda zyada sukoon milta hai.</p>
+      <p>Tumhari smile meri strength hai,<br>tumhara saath meri sabse badi blessing 💖</p>
+      <p>Har Valentine, har din,<br>main tumhe thoda aur pyaar karunga 💍</p>
+      <p>Forever yours,<br>Your Valentine 💘</p>
     </div>
   </div>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
