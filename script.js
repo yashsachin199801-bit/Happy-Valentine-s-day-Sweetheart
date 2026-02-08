@@ -22,26 +22,31 @@ const noTexts = [
   "Bas Megha 😌"
 ];
 
+
 // 🔴 YES CLICK — MUSIC MUST START HERE
 yesBtn.addEventListener("click", () => {
-  audio.play().catch(err => {
-    console.log("Audio blocked:", err);
+  // Create audio and play immediately inside this click
+  const music = new Audio("khairiyat.mp3");
+  music.loop = true;
+
+  music.play().catch(err => {
+    console.log("Music couldn’t autoplay:", err);
   });
 
-  document.body.innerHTML = `
+  // THEN update screen
+  document.getElementById("card").innerHTML = `
     <div style="
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:linear-gradient(180deg,#ff7eb3,#ff9dcf);
-      color:white;
-      font-size:32px;
-      font-weight:bold;
+      padding:40px 20px;
       text-align:center;
-      padding:20px;
+      background: pink;
+      min-height: 100vh;
     ">
-      💖 YAY! SHE SAID YES 💖
+      <h1>Meri pyaari Megha ❤️</h1>
+      <p style="font-size:16px;line-height:1.6">
+        Tum meri life ka wo hissa ho jahan har din thoda zyada sukoon milta hai.<br><br>
+        Tumhari smile meri strength hai...
+      </p>
+      <img src="megha.jpg" style="width:220px;border-radius:16px;border:4px solid white">
     </div>
   `;
 });
