@@ -25,8 +25,8 @@ quizSteps.forEach(step => {
         msg.textContent = "";
         screen.classList.add("hidden");
 
-        const nextScreen = document.getElementById(step.next);
-        nextScreen.classList.remove("hidden");
+        const next = document.getElementById(step.next);
+        next.classList.remove("hidden");
 
         if (step.next === "gameScreen") {
           placeNoButtonInitially();
@@ -74,28 +74,24 @@ const noMessages = [
 
 /* ===================== GEOMETRY HELPERS ===================== */
 
-function getOverlapRatio(rectA, rectB) {
-  const xOverlap = Math.max(
+function rectOverlapArea(a, b) {
+  const x = Math.max(
     0,
-    Math.min(rectA.right, rectB.right) - Math.max(rectA.left, rectB.left)
+    Math.min(a.right, b.right) - Math.max(a.left, b.left)
   );
-  const yOverlap = Math.max(
+  const y = Math.max(
     0,
-    Math.min(rectA.bottom, rectB.bottom) - Math.max(rectA.top, rectB.top)
+    Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)
   );
-
-  const overlapArea = xOverlap * yOverlap;
-  const areaB = rectB.width * rectB.height;
-
-  return areaB === 0 ? 0 : overlapArea / areaB;
+  return x * y;
 }
 
-function overlaps(rectA, rectB) {
+function overlaps(a, b) {
   return !(
-    rectA.right < rectB.left ||
-    rectA.left > rectB.right ||
-    rectA.bottom < rectB.top ||
-    rectA.top > rectB.bottom
+    a.right < b.left ||
+    a.left > b.right ||
+    a.bottom < b.top ||
+    a.top > b.bottom
   );
 }
 
@@ -107,43 +103,52 @@ function placeNoButtonInitially() {
 
 function moveNoButtonSafely(isInitial = false) {
   const area = gameArea.getBoundingClientRect();
-  const btn = noBtn.getBoundingClientRect();
-  const yes = yesZone.getBoundingClientRect();
-  const ques = questionBlock.getBoundingClientRect();
+  const noRect = noBtn.getBoundingClientRect();
+  const yesRect = yesZone.getBoundingClientRect();
+  const quesRect = questionBlock.getBoundingClientRect();
+
+  const noArea = noRect.width * noRect.height;
+  const yesArea = yesRect.width * yesRect.height;
 
   let x, y, tries = 0;
 
   do {
     if (isInitial) {
-      // Start BELOW YES, centered
-      x = (area.width - btn.width) / 2;
-      y = yes.bottom - area.top + 20;
+      x = (area.width - noRect.width) / 2;
+      y = yesRect.bottom - area.top + 20;
     } else {
-      x = Math.random() * (area.width - btn.width);
-      y = Math.random() * (area.height - btn.height);
+      x = Math.random() * (area.width - noRect.width);
+      y = Math.random() * (area.height - noRect.height);
     }
 
     const future = {
       left: area.left + x,
-      right: area.left + x + btn.width,
+      right: area.left + x + noRect.width,
       top: area.top + y,
-      bottom: area.top + y + btn.height,
-      width: btn.width,
-      height: btn.height
+      bottom: area.top + y + noRect.height
     };
 
-    const overlapWithQuestion = overlaps(future, ques);
-    const overlapRatioWithYes = getOverlapRatio(future, yes);
-
-    // Reject if:
-    // 1. overlaps question text
-    // 2. overlaps YES more than 40%
-    if (!overlapWithQuestion && overlapRatioWithYes <= 0.4) {
-      break;
+    // ❌ Never overlap question
+    if (overlaps(future, quesRect)) {
+      tries++;
+      continue;
     }
 
-    tries++;
-  } while (tries < 120);
+    const overlapArea = rectOverlapArea(future, yesRect);
+
+    const overlapRatioOnYes = overlapArea / yesArea;
+    const overlapRatioOnNo = overlapArea / noArea;
+
+    // ❌ Reject if:
+    // - YES hidden > 40%
+    // - NO hidden > 40%
+    if (overlapRatioOnYes > 0.4 || overlapRatioOnNo > 0.4) {
+      tries++;
+      continue;
+    }
+
+    break;
+  } while (tries < 150);
 
   noBtn.style.left = `${x}px`;
   noBtn.style.top = `${y}px`;
@@ -165,7 +170,7 @@ noBtn.addEventListener("click", () => {
 
   moveNoButtonSafely(false);
 
-  // Grow YES safely (no scale)
+  // Grow YES safely (NO scale)
   if (yesW < window.innerWidth * 0.9) yesW += 28;
   if (yesH < 180) yesH += 14;
   yesZone.style.width = `${yesW}px`;
@@ -175,9 +180,7 @@ noBtn.addEventListener("click", () => {
 /* ===================== YES BUTTON ===================== */
 
 yesBtn.addEventListener("click", () => {
-  if (audio.paused) {
-    audio.play().catch(() => {});
-  }
+  if (audio.paused) audio.play().catch(() => {});
 
   setTimeout(() => {
     confetti({
