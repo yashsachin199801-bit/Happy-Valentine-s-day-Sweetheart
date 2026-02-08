@@ -1,26 +1,41 @@
-/* QUIZ FLOW */
+/* ================= MCQ WRONG MESSAGES ================= */
+const quizWrongMessages = [
+  "Hmm… close but not quite 😜",
+  "Nope 😅 try remembering again",
+  "Aww 🥺 you know this one",
+  "Think harder 💭 I believe in you",
+  "Hehe 😏 that’s not it",
+  "Memory test failed 😆 retry",
+  "Dil se yaad karo ❤️",
+  "Almost… but not this 😜"
+];
+
+/* ================= QUIZ FLOW ================= */
 const quizFlow = [
-  { id: "quiz1", next: "quiz2" },
-  { id: "quiz2", next: "quiz3" },
-  { id: "quiz3", next: "gameScreen" }
+  { id: "quiz1", next: "quiz2", wrongIndex: 0 },
+  { id: "quiz2", next: "quiz3", wrongIndex: 0 },
+  { id: "quiz3", next: "gameScreen", wrongIndex: 0 }
 ];
 
 quizFlow.forEach(step => {
   const screen = document.getElementById(step.id);
   const msg = screen.querySelector(".msg");
-  screen.querySelectorAll(".opt").forEach(btn => {
+  const options = screen.querySelectorAll(".opt");
+
+  options.forEach(btn => {
     btn.addEventListener("click", () => {
       if (btn.classList.contains("correct")) {
         screen.classList.add("hidden");
         document.getElementById(step.next).classList.remove("hidden");
       } else {
-        msg.textContent = "Oops 😜 thoda aur yaad karo...";
+        msg.textContent = quizWrongMessages[step.wrongIndex];
+        step.wrongIndex = (step.wrongIndex + 1) % quizWrongMessages.length;
       }
     });
   });
 });
 
-/* GAME */
+/* ================= GAME ================= */
 const yesZone = document.getElementById("yesZone");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
@@ -53,7 +68,6 @@ const noMessages = [
 noBtn.addEventListener("click", () => {
   attemptsLeft--;
   attemptsText.textContent = `Attempts left: ${attemptsLeft} / 10`;
-
   destinyMsg.textContent = noMessages[10 - attemptsLeft - 1] || "";
 
   if (attemptsLeft <= 0) {
