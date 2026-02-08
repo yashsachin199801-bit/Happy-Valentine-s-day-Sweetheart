@@ -1,6 +1,6 @@
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const noArea = document.getElementById("noArea");
+const noZone = document.getElementById("noZone");
 const attemptsText = document.getElementById("attempts");
 const title = document.getElementById("title");
 const music = document.getElementById("music");
@@ -18,83 +18,53 @@ const noTexts = [
   "Bas Megha 😌"
 ];
 
-let clicks = 0;
-let yesWidth = 200;
-let yesHeight = 70;
+let noClicks = 0;
 
-const WIDTH_GROW = 1.25;
-const HEIGHT_GROW = 1.35;
-const MAX_WIDTH = window.innerWidth * 0.9;
-const MAX_HEIGHT = window.innerHeight * 0.55;
-
-/* NO CLICK */
+/* NO BUTTON */
 noBtn.addEventListener("click", () => {
-  if (clicks >= 10) return;
+  if (noClicks >= 10) return;
 
-  clicks++;
-  attemptsText.textContent = `Attempts left: ${10 - clicks} / 10`;
-  noBtn.textContent = noTexts[clicks - 1];
+  noBtn.innerText = noTexts[noClicks];
+  noClicks++;
+  attemptsText.innerText = `Attempts left: ${10 - noClicks} / 10`;
 
-  /* GROW YES (REAL SIZE) */
-  yesWidth = Math.min(yesWidth * WIDTH_GROW, MAX_WIDTH);
-  yesHeight = Math.min(yesHeight * HEIGHT_GROW, MAX_HEIGHT);
+  // Move NO safely inside its own zone
+  const zoneW = noZone.clientWidth;
+  const zoneH = noZone.clientHeight;
+  const btnW = noBtn.offsetWidth;
+  const btnH = noBtn.offsetHeight;
 
-  yesBtn.style.width = `${yesWidth}px`;
-  yesBtn.style.height = `${yesHeight}px`;
+  const x = Math.random() * (zoneW - btnW);
+  const y = Math.random() * (zoneH - btnH);
 
-  /* MOVE NO SAFELY */
-  const area = noArea.getBoundingClientRect();
-  const btn = noBtn.getBoundingClientRect();
-  const margin = 12;
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
+  noBtn.style.transform = "none";
 
-  const maxX = area.width - btn.width - margin;
-  const maxY = area.height - btn.height - margin;
+  // Grow YES button (REAL size, not transform)
+  yesBtn.style.width = `${220 + noClicks * 18}px`;
+  yesBtn.style.height = `${110 + noClicks * 22}px`;
 
-  if (maxX > margin && maxY > margin) {
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-    noBtn.style.left = `${x}px`;
-    noBtn.style.top = `${y}px`;
-    noBtn.style.transform = "none";
-  }
-
-  if (clicks === 10) {
+  if (noClicks === 10) {
     noBtn.style.display = "none";
-    title.textContent = "😌 Enough Megha… Destiny has decided 💘";
-    attemptsText.textContent = "No more escapes 😌";
+    title.innerText = "😌 Enough Megha… Destiny has decided 💘";
+    attemptsText.innerText = "No more escapes 😌";
   }
 });
 
-/* YES CLICK */
+/* YES BUTTON */
 yesBtn.addEventListener("click", () => {
   music.play().catch(() => {});
 
-  confetti({
-    particleCount: 200,
-    spread: 110,
-    origin: { y: 0.6 }
-  });
-
-  document.getElementById("app").innerHTML = `
-    <div style="text-align:center;color:white;padding:40px 20px">
-      <h1>Meri pyaari Megha ❤️</h1>
-
-      <p style="font-size:16px;line-height:1.7">
-        Tum meri life ka wo hissa ho jahan har din
-        thoda zyada sukoon milta hai.<br><br>
-
-        Tumhari smile meri strength hai,
-        tumhara saath meri sabse badi blessing 💖<br><br>
-
-        Har Valentine, har din,
-        main tumhe thoda aur pyaar karunga 💍<br><br>
-
-        Forever yours,<br>
-        Your Valentine 💘
+  document.getElementById("card").innerHTML = `
+    <div style="text-align:center;padding:40px;color:white">
+      <h1>💖 YAY! SHE SAID YES 💖</h1>
+      <p style="margin-top:20px;font-size:18px">
+        Meri pyaari Megha ❤️<br><br>
+        Har Valentine, har din,<br>
+        main tumhe thoda aur pyaar karunga 💍
       </p>
-
-      <img src="megha1.jpg"
-        style="width:220px;border-radius:16px;border:4px solid white;margin-top:20px">
+      <img src="megha1.jpg" style="margin-top:20px;width:220px;border-radius:16px">
     </div>
   `;
 });
