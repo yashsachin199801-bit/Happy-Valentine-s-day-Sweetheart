@@ -6,7 +6,6 @@ const attemptsText = document.getElementById("attempts");
 const title = document.getElementById("title");
 const music = document.getElementById("music");
 
-/* UPDATED TEXTS */
 const noTexts = [
   "Think again Megha 🤨",
   "Really? 😐",
@@ -24,10 +23,10 @@ let noClicks = 0;
 let scaleX = 1;
 let scaleY = 1;
 
-const SCALE_X_FACTOR = 1.18;
-const SCALE_Y_FACTOR = 1.32;
-const MAX_X_SCALE = 3.2;
-const YES_ZONE_INCREMENT = 45;
+const SCALE_X = 1.22;
+const SCALE_Y = 1.35;
+const MAX_X = 3.4;
+const YES_ZONE_GROW = 45;
 
 noBtn.addEventListener("click", () => {
   if (noClicks >= 10) return;
@@ -36,44 +35,33 @@ noBtn.addEventListener("click", () => {
   attemptsText.innerText = `Attempts left: ${10 - noClicks} / 10`;
   noBtn.innerText = noTexts[noClicks - 1];
 
-  /* EXPAND YES ZONE */
-  const headerHeight = document.querySelector(".header").offsetHeight;
-  const maxZoneHeight = window.innerHeight - headerHeight - 40;
-
+  // Grow YES zone vertically
+  const headerH = document.querySelector(".header").offsetHeight;
+  const maxH = window.innerHeight - headerH - 40;
   yesZone.style.height = `${Math.min(
-    yesZone.offsetHeight + YES_ZONE_INCREMENT,
-    maxZoneHeight
+    yesZone.offsetHeight + YES_ZONE_GROW,
+    maxH
   )}px`;
 
-  /* SCALE YES (CENTER LOCKED) */
-  scaleX = Math.min(scaleX * SCALE_X_FACTOR, MAX_X_SCALE);
-  scaleY = scaleY * SCALE_Y_FACTOR;
+  // Grow YES button (center locked)
+  scaleX = Math.min(scaleX * SCALE_X, MAX_X);
+  scaleY = scaleY * SCALE_Y;
+  yesBtn.style.transform = `scale(${scaleX}, ${scaleY})`;
 
-  yesBtn.style.transform =
-    `translate(-50%, -50%) scale(${scaleX}, ${scaleY})`;
-
-  /* NO BUTTON — BULLETPROOF BOUNDARY */
-  const zoneH = noZone.clientHeight;
-  const zoneW = noZone.clientWidth;
-  const btnH = noBtn.offsetHeight;
-  const btnW = noBtn.offsetWidth;
+  // Move NO safely inside screen
+  const zoneRect = noZone.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
   const margin = 12;
 
-  if (zoneH <= btnH + margin * 2) {
-    // Safe lock when space is tight
-    noBtn.style.left = "50%";
-    noBtn.style.top = "10px";
-    noBtn.style.transform = "translateX(-50%)";
-  } else {
-    const maxX = zoneW - btnW - margin;
-    const maxY = zoneH - btnH - margin;
+  const maxX = zoneRect.width - btnRect.width - margin;
+  const maxY = zoneRect.height - btnRect.height - margin;
 
-    const x = Math.max(margin, Math.random() * maxX);
-    const y = Math.max(margin, Math.random() * maxY);
-
-    noBtn.style.transform = "none";
+  if (maxX > margin && maxY > margin) {
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
     noBtn.style.left = `${x}px`;
     noBtn.style.top = `${y}px`;
+    noBtn.style.transform = "none";
   }
 
   if (noClicks === 10) {
@@ -83,7 +71,7 @@ noBtn.addEventListener("click", () => {
   }
 });
 
-/* YES CLICK */
+// YES CLICK
 yesBtn.addEventListener("click", () => {
   music.play().catch(() => {});
 
@@ -94,25 +82,16 @@ yesBtn.addEventListener("click", () => {
   });
 
   document.getElementById("card").innerHTML = `
-    <div style="padding:40px 20px;text-align:center">
+    <div style="text-align:center;padding:40px 20px;color:white">
       <h1>Meri pyaari Megha ❤️</h1>
-
-      <p style="font-size:16px;line-height:1.6">
-        Tum meri life ka wo hissa ho jahan har din
-        thoda zyada sukoon milta hai.<br><br>
-
-        Tumhari smile meri strength hai,
-        tumhara saath meri sabse badi blessing 💖<br><br>
-
-        Har Valentine, har din,
-        main tumhe thoda aur pyaar karunga 💍<br><br>
-
-        Forever yours,<br>
-        Your Valentine 💘
+      <p style="line-height:1.7">
+        Tum meri life ka wo hissa ho jahan har din thoda zyada sukoon milta hai.<br><br>
+        Tumhari smile meri strength hai, tumhara saath meri sabse badi blessing 💖<br><br>
+        Har Valentine, har din, main tumhe thoda aur pyaar karunga 💍<br><br>
+        Forever yours,<br>Your Valentine 💘
       </p>
-
       <img src="megha1.jpg"
-        style="width:220px;border-radius:16px;border:4px solid white">
+        style="width:220px;border-radius:16px;border:4px solid white;margin-top:20px">
     </div>
   `;
 });
