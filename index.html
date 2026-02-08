@@ -2,66 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Megha ❤️ Valentine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine 💘</title>
+
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-  <!-- AUDIO (never destroyed) -->
-  <audio id="music" src="Khairiyat.mp3"></audio>
+  <!-- Audio MUST be top-level and never destroyed -->
+  <audio id="loveAudio" src="khairiyat.mp3" preload="auto"></audio>
 
-  <!-- MAIN CARD -->
-  <div id="card">
-
-    <!-- GAME SCREEN -->
-    <div id="gameScreen">
-      <h1 id="title">💘 Megha, will you be my Valentine?</h1>
+  <!-- GAME SCREEN -->
+  <div id="gameScreen" class="screen">
+    <div class="card">
+      <h1>💘 Megha, will you be my Valentine?</h1>
       <p id="attempts">Attempts left: 10 / 10</p>
 
-      <!-- YES ZONE -->
-      <div id="yesZone">
-        <button id="yesBtn">
-          Yes ❤️
-        </button>
-      </div>
+      <div class="buttons-row">
 
-      <!-- NO ZONE -->
-      <div id="noZone">
-        <button id="noBtn">No 😐</button>
-      </div>
-    </div>
+        <!-- YES ZONE -->
+        <div id="yesZone">
+          <button id="yesBtn">YES 💖</button>
+        </div>
 
-    <!-- FINAL SCREEN -->
-    <div id="finalScreen" class="hidden">
-      <h1>💖 YAY! SHE SAID YES 💖</h1>
+        <!-- NO ZONE -->
+        <div id="noZone">
+          <button id="noBtn">NO 🙈</button>
+        </div>
 
-      <p class="letter">
-        Meri pyaari Megha ❤️<br><br>
-
-        Tum meri life ka wo hissa ho jahan har din
-        thoda zyada sukoon milta hai.<br><br>
-
-        Tumhari smile meri strength hai,
-        tumhara saath meri sabse badi blessing 💖<br><br>
-
-        Har Valentine, har din,
-        main tumhe thoda aur pyaar karunga 💍<br><br>
-
-        Forever yours,<br>
-        Your Valentine 💘
-      </p>
-
-      <div class="slideshow">
-        <img id="slideImage" src="megha1.jpg" alt="Megha">
       </div>
     </div>
-
   </div>
 
-  <!-- CONFETTI -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="script.js"></script>
+  <!-- FINAL SCREEN -->
+  <div id="finalScreen" class="screen hidden">
+    <div class="card final-card">
 
+      <img id="slideshow" src="megha1.jpg" alt="Megha" />
+
+      <div class="letter">
+        <p>Meri pyaari Megha ❤️</p>
+
+        <p>
+          Tum meri life ka wo hissa ho jahan har din<br />
+          thoda zyada sukoon milta hai.
+        </p>
+
+        <p>
+          Tumhari smile meri strength hai,<br />
+          tumhara saath meri sabse badi blessing 💖
+        </p>
+
+        <p>
+          Har Valentine, har din,<br />
+          main tumhe thoda aur pyaar karunga 💍
+        </p>
+
+        <p>
+          Forever yours,<br />
+          Your Valentine 💘
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
