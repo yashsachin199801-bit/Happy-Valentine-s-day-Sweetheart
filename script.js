@@ -1,12 +1,10 @@
 const yesBtn = document.getElementById("yesBtn");
-const yesZone = document.getElementById("yesZone");
 const noBtn = document.getElementById("noBtn");
-const noZone = document.getElementById("noZone");
+const noArea = document.getElementById("noArea");
 const attemptsText = document.getElementById("attempts");
 const title = document.getElementById("title");
 const music = document.getElementById("music");
 
-/* FINAL NO TEXTS */
 const noTexts = [
   "Think again Megha 🤨",
   "Really? 😐",
@@ -20,82 +18,64 @@ const noTexts = [
   "Bas Megha 😌"
 ];
 
-let noClicks = 0;
-
-/* YES scaling */
+let clicks = 0;
 let scaleX = 1;
 let scaleY = 1;
 
-const SCALE_X_FACTOR = 1.22;
-const SCALE_Y_FACTOR = 1.35;
-const MAX_X_SCALE = 3.4;
-const YES_ZONE_INCREMENT = 45;
+const GROW_X = 1.18;
+const GROW_Y = 1.25;
+const MAX_X = 3;
 
 /* NO CLICK */
 noBtn.addEventListener("click", () => {
-  if (noClicks >= 10) return;
+  if (clicks >= 10) return;
 
-  noClicks++;
-  attemptsText.innerText = `Attempts left: ${10 - noClicks} / 10`;
-  noBtn.innerText = noTexts[noClicks - 1];
+  clicks++;
+  attemptsText.textContent = `Attempts left: ${10 - clicks} / 10`;
+  noBtn.textContent = noTexts[clicks - 1];
 
-  /* EXPAND YES ZONE DOWNWARD (never touches header) */
-  const headerHeight = document.querySelector(".header").offsetHeight;
-  const maxZoneHeight = window.innerHeight - headerHeight - 40;
-
-  yesZone.style.height = `${Math.min(
-    yesZone.offsetHeight + YES_ZONE_INCREMENT,
-    maxZoneHeight
-  )}px`;
-
-  /* GROW YES BUTTON (DOWNWARD ONLY) */
-  scaleX = Math.min(scaleX * SCALE_X_FACTOR, MAX_X_SCALE);
-  scaleY = scaleY * SCALE_Y_FACTOR;
-
+  /* Grow YES calmly */
+  scaleX = Math.min(scaleX * GROW_X, MAX_X);
+  scaleY = scaleY * GROW_Y;
   yesBtn.style.transform = `scale(${scaleX}, ${scaleY})`;
 
-  /* MOVE NO BUTTON — ALWAYS INSIDE NO ZONE */
-  const zoneRect = noZone.getBoundingClientRect();
-  const btnRect = noBtn.getBoundingClientRect();
+  /* Move NO safely inside playground */
+  const area = noArea.getBoundingClientRect();
+  const btn = noBtn.getBoundingClientRect();
   const margin = 12;
 
-  const minX = margin;
-  const maxX = zoneRect.width - btnRect.width - margin;
-  const minY = margin;
-  const maxY = zoneRect.height - btnRect.height - margin;
+  const maxX = area.width - btn.width - margin;
+  const maxY = area.height - btn.height - margin;
 
-  if (maxX > minX && maxY > minY) {
-    const x = Math.random() * (maxX - minX) + minX;
-    const y = Math.random() * (maxY - minY) + minY;
-
-    noBtn.style.transform = "none";
+  if (maxX > margin && maxY > margin) {
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
     noBtn.style.left = `${x}px`;
     noBtn.style.top = `${y}px`;
+    noBtn.style.transform = "none";
   }
 
-  if (noClicks === 10) {
+  if (clicks === 10) {
     noBtn.style.display = "none";
-    title.innerText = "😌 Enough Megha… Destiny has decided 💘";
-    attemptsText.innerText = "No more escapes 😌";
+    title.textContent = "😌 Enough Megha… Destiny has decided 💘";
+    attemptsText.textContent = "No more escapes 😌";
   }
 });
 
 /* YES CLICK */
 yesBtn.addEventListener("click", () => {
-  /* Start music INSIDE click (browser-safe) */
   music.play().catch(() => {});
 
   confetti({
-    particleCount: 200,
+    particleCount: 180,
     spread: 100,
     origin: { y: 0.6 }
   });
 
-  document.getElementById("card").innerHTML = `
-    <div style="text-align:center;padding:40px 20px;color:white">
+  document.getElementById("app").innerHTML = `
+    <div style="text-align:center;color:white;padding:40px 20px">
       <h1>Meri pyaari Megha ❤️</h1>
-
-      <p style="line-height:1.7;font-size:16px">
+      <p style="font-size:16px;line-height:1.7">
         Tum meri life ka wo hissa ho jahan har din
         thoda zyada sukoon milta hai.<br><br>
 
