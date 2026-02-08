@@ -1,4 +1,4 @@
-/* ================= QUIZ ================= */
+/* ========== QUIZ ========== */
 
 const quizWrongMessages = [
   "Oops 😜 try again",
@@ -24,7 +24,7 @@ quizSteps.forEach(step => {
         msg.textContent = "";
         screen.classList.add("hidden");
         document.getElementById(step.next).classList.remove("hidden");
-        if (step.next === "gameScreen") initNoButton();
+        if (step.next === "gameScreen") resetNoButton();
       } else {
         msg.textContent = quizWrongMessages[step.wrong];
         step.wrong = (step.wrong + 1) % quizWrongMessages.length;
@@ -33,10 +33,10 @@ quizSteps.forEach(step => {
   });
 });
 
-/* ================= GAME ================= */
+/* ========== GAME ========== */
 
 const noBtn = document.getElementById("noBtn");
-const noArea = document.getElementById("noArea");
+const noWrapper = document.querySelector(".no-wrapper");
 const yesZone = document.getElementById("yesZone");
 const yesBtn = document.getElementById("yesBtn");
 
@@ -65,12 +65,13 @@ const noMessages = [
   "Destiny chose us ❤️💍"
 ];
 
-function initNoButton() {
-  moveNoButton();
+function resetNoButton() {
+  noBtn.style.left = "0px";
+  noBtn.style.top = "0px";
 }
 
 function moveNoButton() {
-  const area = noArea.getBoundingClientRect();
+  const area = noWrapper.getBoundingClientRect();
   const btn = noBtn.getBoundingClientRect();
 
   const x = Math.random() * (area.width - btn.width);
@@ -94,8 +95,8 @@ noBtn.onclick = () => {
 
   moveNoButton();
 
-  if (yesW < window.innerWidth * 0.9) yesW += 30;
-  if (yesH < 200) yesH += 15;
+  if (yesW < window.innerWidth * 0.9) yesW += 28;
+  if (yesH < 200) yesH += 14;
   yesZone.style.width = `${yesW}px`;
   yesZone.style.height = `${yesH}px`;
 };
