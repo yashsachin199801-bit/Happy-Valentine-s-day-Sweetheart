@@ -1,21 +1,23 @@
 * {
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
 }
 
 body {
-  margin: 0;
   min-height: 100vh;
-  background: linear-gradient(180deg, #ff8fb3, #ffb3cc);
+  background: linear-gradient(180deg, #ff8fb3, #ffb3d1);
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
-.app {
+#card {
   width: 100%;
   max-width: 420px;
   min-height: 100vh;
-  padding: 20px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
 }
@@ -23,60 +25,66 @@ body {
 /* HEADER */
 .header {
   text-align: center;
+  margin-bottom: 20px;
+}
+
+#title {
   color: white;
-  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 700;
 }
 
-.header h1 {
-  margin-bottom: 6px;
-}
-
-.header p {
+#attempts {
+  margin-top: 8px;
+  color: white;
   opacity: 0.9;
 }
 
-/* YES AREA — REAL SIZE GROWTH */
-.yes-area {
+/* YES ZONE */
+#yesZone {
+  flex: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  margin: 20px 0;
+  align-items: center;
 }
 
 #yesBtn {
-  background: #2ecc71;
+  background: #35c96b;
   color: white;
   border: none;
-  border-radius: 48px;
-  font-size: 22px;
-  width: 200px;
-  height: 70px;
+  border-radius: 40px;
+  font-size: 32px;
   cursor: pointer;
+
+  width: 220px;
+  height: 110px;
+
   transition: width 0.25s ease, height 0.25s ease;
 }
 
-/* NO AREA — SEPARATE PLAYGROUND */
-.no-area {
+/* GUARANTEE FULL CLICK AREA */
+#yesBtn * {
+  pointer-events: none;
+}
+
+/* NO ZONE */
+#noZone {
   position: relative;
-  flex: 1;
-  border-radius: 18px;
+  height: 120px;
   margin-top: 10px;
 }
 
-/* NO BUTTON */
 #noBtn {
   position: absolute;
-  top: 20px;
   left: 50%;
+  top: 10px;
   transform: translateX(-50%);
+
   background: #e74c3c;
   color: white;
   border: none;
   border-radius: 30px;
-  padding: 12px 26px;
-  font-size: 16px;
+  padding: 12px 20px;
+  font-size: 14px;
   cursor: pointer;
-  max-width: 85%;
-  text-align: center;
-  transition: top 0.25s ease, left 0.25s ease;
 }
