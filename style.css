@@ -112,3 +112,14 @@ h1 {
   text-align: left;
   line-height: 1.7;
 }
+/* existing styles remain the same */
+
+#gameContent {
+  position: relative;
+}
+
+#noZone {
+  position: relative;
+  width: 160px;
+  height: 64px;
+}
