@@ -6,16 +6,16 @@
   <title>Valentine 💘</title>
 
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-<!-- AUDIO (TOP LEVEL, NEVER DESTROYED) -->
 <audio id="loveAudio" src="khairiyat.mp3" preload="auto"></audio>
 
-<!-- QUIZ SCREEN 1 -->
+<!-- QUIZ 1 -->
 <div class="screen" id="quiz1">
-  <div class="card">
+  <div class="content">
     <h1>Question 1 💭</h1>
     <p class="question">When did we meet for the 1st time ?</p>
     <div class="options">
@@ -28,9 +28,9 @@
   </div>
 </div>
 
-<!-- QUIZ SCREEN 2 -->
+<!-- QUIZ 2 -->
 <div class="screen hidden" id="quiz2">
-  <div class="card">
+  <div class="content">
     <h1>Question 2 😅</h1>
     <p class="question">What makes me smile ?</p>
     <div class="options">
@@ -43,9 +43,9 @@
   </div>
 </div>
 
-<!-- QUIZ SCREEN 3 -->
+<!-- QUIZ 3 -->
 <div class="screen hidden" id="quiz3">
-  <div class="card">
+  <div class="content">
     <h1>Final Question 💖</h1>
     <p class="question">Who loves whom more?</p>
     <div class="options">
@@ -58,29 +58,34 @@
   </div>
 </div>
 
-<!-- VALENTINE GAME SCREEN -->
+<!-- VALENTINE GAME -->
 <div class="screen hidden" id="gameScreen">
-  <div class="card">
+  <div class="content">
+
     <h1>💘 Megha You know me very well you came this far</h1>
     <h1>I want to know what will you say if I ask you this ...</h1>
-    <h1>Will you be my Valentine ?</h1>
+    <h1>Will you be my Valentine ? 💖</h1>
+
     <p id="attempts">Attempts left: 10 / 10</p>
 
     <div class="buttons-row">
       <div id="yesZone">
         <button id="yesBtn">YES 💖</button>
       </div>
+
       <div id="noZone">
         <button id="noBtn">NO 🙈</button>
       </div>
     </div>
+
+    <p id="destinyMsg"></p>
   </div>
 </div>
 
-<!-- FINAL SCREEN -->
+<!-- FINAL -->
 <div class="screen hidden" id="finalScreen">
-  <div class="card final-card">
-    <img id="slideshow" src="megha1.jpg" alt="Megha" />
+  <div class="content">
+    <img id="slideshow" src="megha1.jpg" alt="Megha">
     <div class="letter">
       <p>Meri pyaari Megha ❤️</p>
       <p>Tum meri life ka wo hissa ho jahan har din<br>thoda zyada sukoon milta hai.</p>
