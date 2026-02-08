@@ -25,6 +25,7 @@ quizFlow.forEach(step => {
   options.forEach(btn => {
     btn.addEventListener("click", () => {
       if (btn.classList.contains("correct")) {
+        msg.textContent = ""; // clear message on success
         screen.classList.add("hidden");
         document.getElementById(step.next).classList.remove("hidden");
       } else {
